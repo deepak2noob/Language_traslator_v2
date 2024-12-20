@@ -1,6 +1,0 @@
-com\translator\service\UserService.class
-com\translator\config\SecurityConfig.class
-com\translator\controller\TranslatorController.class
-com\translator\model\User.class
-com\translator\TranslatorApplication.class
-com\translator\repository\UserRepository.class
