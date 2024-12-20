@@ -34,9 +34,14 @@ public class TranslatorController {
     }
     
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user) {
-        userService.save(user);
-        return "redirect:/login";
+    public String registerUser(@ModelAttribute User user, Model model) {
+        try {
+            userService.save(user);
+            return "redirect:/login";
+        } catch (Exception e) {
+            model.addAttribute("error", "Registration failed. Please try again.");
+            return "register";
+        }
     }
     
     @PostMapping("/translate")
@@ -46,16 +51,4 @@ public class TranslatorController {
             text, fromLang, toLang);
         return restTemplate.getForObject(url, String.class);
     }
-    @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model) {
-        try {
-            userService.save(user);
-            return "redirect:/login";
-        } catch (Exception e) {
-            model.addAttribute("error", "Registration failed. Please try again.");
-            return "register";
-        }
 }
-}
-
-    
