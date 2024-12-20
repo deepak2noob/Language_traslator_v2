@@ -1,3 +1,4 @@
+# .gitignore
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -36,3 +37,7 @@ build/
 *.db
 *.mv.db
 *.trace.db
+
+### Application specific ###
+translatordb*
+application.properties
