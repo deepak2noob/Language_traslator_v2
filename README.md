@@ -24,4 +24,4 @@ A Spring Boot application that provides language translation services using the 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+https://github.com/deepak2noob/Language_traslator_v2.git
