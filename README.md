@@ -1,7 +1,8 @@
 
 
----
+
 <div align="center">
+---
 # 🌐 Language Translator Application
 
 
