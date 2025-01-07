@@ -71,6 +71,6 @@ A modern, secure, and user-friendly language translation application built with 
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/deepak2testing/translator.git
+   git clone https://github.com/deepak2noob/Language_traslator_v2.git
    cd translator
 
