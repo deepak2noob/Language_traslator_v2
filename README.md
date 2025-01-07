@@ -3,7 +3,7 @@
 
 <div align="center">
 
-## 🌐 Language Translator Application
+### 🌐 Language Translator Application
 
 
 
