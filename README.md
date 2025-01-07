@@ -1,12 +1,12 @@
 
 
 ---
-
+<div align="center">
 # 🌐 Language Translator Application
 
 
 
-<div align="center">
+
 
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-2.7.0-green.svg)
 ![Java](https://img.shields.io/badge/Java-17-orange.svg)
