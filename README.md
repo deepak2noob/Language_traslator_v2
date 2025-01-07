@@ -5,10 +5,6 @@
 
 ### 🌐 Language Translator Application
 
-
-
-
-
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-2.7.0-green.svg)
 ![Java](https://img.shields.io/badge/Java-17-orange.svg)
 ![HTML](https://img.shields.io/badge/HTML-56.1%25-red.svg)
@@ -83,8 +79,8 @@ A modern, secure, and user-friendly language translation application built with 
 
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/deepak2testing/translator.git
-   cd translator
+   git clone https://github.com/deepak2noob/Language_traslator_v2.git
+   cd Language_traslator_v2
    ```
 
 2. **Build the Project**  
@@ -142,4 +138,5 @@ A modern, secure, and user-friendly language translation application built with 
     ```
 
 ---
+
 
