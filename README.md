@@ -13,13 +13,13 @@
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.0-purple.svg)
 
 A modern, secure, and user-friendly language translation application built with Spring Boot and powered by MyMemory Translation API.
-
+</div>
 [Features](#-features) •  
 [Tech Stack](#-tech-stack) •  
 [Getting Started](#-getting-started) •  
 [API Usage](#-api-usage)
 
-</div>
+
 
 ---
 
