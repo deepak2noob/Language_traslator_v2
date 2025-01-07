@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Language Translator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #f0f8ff, #e6e6fa);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #6a5acd !important;
+        }
+
+        .navbar .nav-link {
+            color: #f8f8ff !important;
+        }
+
+        .navbar .nav-link:hover {
+            color: #dcdcdc !important;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #6a5acd;
+            border-color: #6a5acd;
+        }
+
+        .btn-primary:hover {
+            background-color: #483d8b;
+            border-color: #483d8b;
+        }
+
+        .translation-area {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Translator App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <span class="nav-link" th:text="'Welcome, ' + ${#authentication.name}"></span>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:href="@{/register}">Register</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post">
+                            <button class="btn btn-link nav-link" type="submit">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <!-- Validation Messages -->
+        <div th:if="${errors}" class="alert alert-danger alert-dismissible fade show">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <div>
+                    <ul class="mb-0">
+                        <li th:each="error : ${errors}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Success Messages -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Translation Form -->
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Language Translator</h2>
+                <form id="translationForm" th:object="${translationRequest}" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="fromLang" class="form-label">From Language:</label>
+                                <select class="form-select" id="fromLang" name="fromLang" th:field="*{fromLang}">
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="ja">Japanese</option>
+                                    <option value="ko">Korean</option>
+                                    <option value="zh">Chinese</option>
+                                </select>
+                                <span class="error-message" th:if="${#fields.hasErrors('fromLang')}" th:errors="*{fromLang}"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="toLang" class="form-label">To Language:</label>
+                                <select class="form-select" id="toLang" name="toLang" th:field="*{toLang}">
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="ja">Japanese</option>
+                                    <option value="ko">Korean</option>
+                                    <option value="zh">Chinese</option>
+                                </select>
+                                <span class="error-message" th:if="${#fields.hasErrors('toLang')}" th:errors="*{toLang}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="textToTranslate" class="form-label">Text to Translate:</label>
+                        <textarea class="form-control translation-area" id="textToTranslate" name="text" th:field="*{text}" required></textarea>
+                        <span class="error-message" th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="translatedText" class="form-label">Translated Text:</label>
+                        <textarea class="form-control translation-area" id="translatedText" readonly></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" id="translateBtn"><i class="fas fa-language"></i> Translate</button>
+                        <button type="button" class="btn btn-secondary" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="spinner-overlay d-none">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            const form = $('#translationForm');
+            const loadingSpinner = $('#loadingSpinner');
+            const textToTranslate = $('#textToTranslate');
+            const translatedText = $('#translatedText');
+            const clearBtn = $('#clearBtn');
+
+            form.on('submit', function(e) {
+                e.preventDefault();
+
+                if (!textToTranslate.val().trim()) {
+                    showErrors(['Please enter text to translate']);
+                    return;
+                }
+
+                loadingSpinner.removeClass('d-none');
+
+                const formData = {
+                    text: textToTranslate.val(),
+                    fromLang: $('#fromLang').val(),
+                    toLang: $('#toLang').val()
+                };
+
+                $.ajax({
+                    url: '/translate',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        try {
+                            const result = JSON.parse(response);
+                            if (result.responseData && result.responseData.translatedText) {
+                                translatedText.val(result.responseData.translatedText);
+                            } else {
+                                throw new Error('Invalid response format');
+                            }
+                        } catch (error) {
+                            showErrors(['Translation failed: ' + error.message]);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        showErrors(['Error: ' + (xhr.responseJSON?.message || error)]);
+                    },
+                    complete: function() {
+                        loadingSpinner.addClass('d-none');
+                    }
+                });
+            });
+
+            function showErrors(errorMessages) {
+                const errorDiv = $('<div>')
+                    .addClass('alert alert-danger alert-dismissible fade show')
+                    .append(
+                        $('<ul>').append(
+                            errorMessages.map(msg => $('<li>').text(msg))
+                        )
+                    )
+                    .append(
+                        $('<button>')
+                            .addClass('btn-close')
+                            .attr({
+                                'type': 'button',
+                                'data-bs-dismiss': 'alert',
+                                'aria-label': 'Close'
+                            })
+                    );
+
+                $('.alert-danger').remove();
+                $('#translationForm').before(errorDiv);
+            }
+
+            clearBtn.on('click', function() {
+                textToTranslate.val('');
+                translatedText.val('');
+            });
+
+            textToTranslate.on('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    form.submit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
